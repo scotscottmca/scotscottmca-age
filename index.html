@@ -121,9 +121,6 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="title">My Age Counter</h1>
-        <p class="birth-date">Born: October 10, 1990</p>
-        
         <div class="age-display">
             <div class="age-section">
                 <span class="age-number" id="years">0</span>
@@ -157,8 +154,21 @@
     </div>
 
     <script>
-        // Birth date: October 10, 1990
-        const birthDate = new Date('1990-10-10T00:00:00');
+        const _config = {
+            _a: atob('MTk5MA=='),
+            _b: parseInt('0xa'),
+            _c: parseInt('0xa'),
+            _age1: '1985-05-15',
+            _age2: '1995-12-25',
+            _key: 0x9
+        };
+        
+        const birthDate = new Date(
+            parseInt(_config._a), 
+            _config._key, 
+            _config._b, 
+            0, 0, 0
+        );
 
         function updateAge() {
             const now = new Date();
