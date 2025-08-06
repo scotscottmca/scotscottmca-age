@@ -170,38 +170,34 @@
             const totalHours = Math.floor(totalMinutes / 60);
             const totalDays = Math.floor(totalHours / 24);
             
-            // Calculate years and remaining months
-            const years = now.getFullYear() - birthDate.getFullYear();
-            const monthDiff = now.getMonth() - birthDate.getMonth();
-            const dayDiff = now.getDate() - birthDate.getDate();
+            // Calculate years, months, days properly
+            let actualYears = now.getFullYear() - birthDate.getFullYear();
+            let actualMonths = now.getMonth() - birthDate.getMonth();
+            let actualDays = now.getDate() - birthDate.getDate();
             
-            let actualYears = years;
-            let actualMonths = monthDiff;
-            
-            // Adjust for negative month difference
-            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                actualYears--;
-                actualMonths = monthDiff + 12;
+            // Adjust for negative days
+            if (actualDays < 0) {
+                actualMonths--;
+                // Get the last day of the previous month
+                const lastDayOfPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+                actualDays = lastDayOfPrevMonth - birthDate.getDate() + now.getDate();
             }
             
-            // Calculate remaining days in current month
-            const tempDate = new Date(birthDate.getFullYear() + actualYears, birthDate.getMonth() + actualMonths, birthDate.getDate());
-            const remainingDays = Math.floor((now.getTime() - tempDate.getTime()) / (1000 * 60 * 60 * 24));
+            // Adjust for negative months
+            if (actualMonths < 0) {
+                actualYears--;
+                actualMonths += 12;
+            }
             
             // Calculate remaining hours, minutes, seconds
-            const remainingHours = now.getHours() - birthDate.getHours();
-            const remainingMinutes = now.getMinutes() - birthDate.getMinutes();
-            const remainingSeconds = now.getSeconds() - birthDate.getSeconds();
-            
-            // Adjust for negative values
-            let displayHours = remainingHours >= 0 ? remainingHours : remainingHours + 24;
-            let displayMinutes = remainingMinutes >= 0 ? remainingMinutes : remainingMinutes + 60;
-            let displaySeconds = remainingSeconds >= 0 ? remainingSeconds : remainingSeconds + 60;
+            let displayHours = now.getHours();
+            let displayMinutes = now.getMinutes();
+            let displaySeconds = now.getSeconds();
             
             // Update the display
             document.getElementById('years').textContent = actualYears;
             document.getElementById('months').textContent = actualMonths;
-            document.getElementById('days').textContent = remainingDays;
+            document.getElementById('days').textContent = actualDays;
             document.getElementById('hours').textContent = displayHours;
             document.getElementById('minutes').textContent = displayMinutes;
             document.getElementById('seconds').textContent = displaySeconds;
